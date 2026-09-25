@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>IPアドレス表示テスト</title>
+</head>
+<body>
+    <h1>アクセス情報</h1>
+    <p>あなたのIPアドレス: <span id="ip-address">読み込み中...</span></p>
+    <p>大まかな地域: <span id="location">読み込み中...</span></p>
+
+    <script>
+        // 無料のAPI（ipapi.co）を使ってIPと位置情報を取得
+        fetch('https://ipapi.co')
+            .then(response => response.json())
+            .then(data => {
+                // 画面の文字を書き換える
+                document.getElementById('ip-address').textContent = data.ip;
+                document.getElementById('location').textContent = `${data.region} (${data.country_name})`;
+            })
+            .catch(error => {
+                console.error('エラーが発生しました:', error);
+                document.getElementById('ip-address').textContent = '取得失敗';
+            });
+    </script>
+</body>
+</html>
